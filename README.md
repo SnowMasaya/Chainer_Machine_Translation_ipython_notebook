@@ -1,8 +1,6 @@
 Chainer with Machine Translation Tech-Circle#11 
 ====
 
-<img src="https://connpass-tokyo.s3.amazonaws.com/thumbs/5d/34/5d34d4b6510d664622165a26c37e6e81.png" width="400" height="300" />
-
 This tool is making the Neural Networks Language Model
 
 >[Japanese Reference Pages]<br>
