@@ -5,3 +5,5 @@ notebook==4.0.4
 jinja2==2.8
 pyzmq==14.7.0
 tornado==4.1
+corenlp-python
+cython
