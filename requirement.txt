@@ -6,4 +6,4 @@ jinja2==2.8
 pyzmq==14.7.0
 tornado==4.1
 corenlp-python
-cython
+cython==0.20.1
