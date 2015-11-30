@@ -16,7 +16,7 @@ target_file = "target_tmp.txt"
 
 def parse_method():
 # パースして結果をpretty print
-    for line in open('target.txt', 'r'):
+    for line in open(target_file, 'r'):
         result_json = json.loads(parser.parse(line.strip()))
         words = result_json["sentences"][0]["words"]
         for i in range(len(words)):
