@@ -43,13 +43,14 @@ Installing a library bellow
 ##Requirements
 
     Python 3.4+
-    NumPy
-    chainer
-    ipython
-    notebook
-    jinja2
-    pyzmq
-    tornado
+    numpy==1.9.2
+    chainer==1.4.0
+    ipython==4.0.0
+    notebook==4.0.4
+    jinja2==2.8
+    pyzmq==14.7.0
+    tornado==4.1
+    corenlp-python
 
 ####Confirm library
 
