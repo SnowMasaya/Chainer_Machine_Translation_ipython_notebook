@@ -30,6 +30,8 @@ class EncoderDecoderModel:
         self.epoch            = parameter_dict["epoch"] 
         self.minibatch        = parameter_dict["minibatch"] 
         self.generation_limit = parameter_dict["generation_limit"] 
+        self.show_hands_on_number = parameter_dict["show_hands_on_number"] 
+        self.show_i_epoch     = parameter_dict["show_i_epoch"] 
 
     def __make_model(self):
         self.__model = wrapper.make_model(
@@ -188,11 +190,8 @@ class EncoderDecoderModel:
                 K = len(src_batch)
                 hyp_batch = model.train(src_batch, trg_batch)
 
-                for k in range(K):
-                    trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + k + 1))
-                    trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[k]]))
-                    trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[k]]))
-                    trace('  hyp = ' + ' '.join([x if x != '</s>' else '*' for x in hyp_batch[k]]))
+                if self.show_i_epoch == 0 and trained == 0:
+                    self.print_out(K, i_epoch, trained, src_batch, trg_batch, hyp_batch)
 
                 trained += K
 
@@ -224,3 +223,37 @@ class EncoderDecoderModel:
                 generated += K
 
         trace('finished.')
+
+    def source_to_words(self, source):
+        line = source.replace("¥n", " ").replace("¥t", " ")
+        for spacer in ["(", ")", "{", "}", "[", "]", ",", ";", ":", "++", "!", "$", '"', "'"]:
+            line = line.replace(spacer, " " + spacer + " ")
+    
+        words = [w.strip() for w in line.split()]
+        return words
+
+    def load_data(self, fname):
+        vocab = {}
+        data_dir = "/Users/smap2/TechCircle/Chainer_Machine_Translation_ipython_notebook/"
+        source_courpas = data_dir + fname
+        source = open('%s' % source_courpas, 'r').read()
+        words = self.source_to_words(source)
+        freq = {}
+        dataset = np.ndarray((len(words),), dtype=np.int32)
+        for i, word in enumerate(words):
+            if word not in vocab:
+                vocab[word] = len(vocab)
+                freq[word] = 0
+            dataset[i] = vocab[word]
+            freq[word] += 1
+
+        print('corpus length:', len(words))
+        print('vocab size:', len(vocab))
+    
+    def print_out(self, K, i_epoch, trained, src_batch, trg_batch, hyp_batch):
+
+        for k in range(self.show_hands_on_number):
+            trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + k + 1))
+            trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[k]]))
+            trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[k]]))
+            trace('  hyp = ' + ' '.join([x if x != '</s>' else '*' for x in hyp_batch[k]]))
