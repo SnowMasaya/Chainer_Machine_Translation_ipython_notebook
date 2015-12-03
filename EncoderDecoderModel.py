@@ -196,7 +196,7 @@ class EncoderDecoderModel:
                 trained += K
 
             trace('saving model ...')
-            model.save(model + '.%03d' % (self.epoch + 1))
+            model.save(str(model) + '.%03d' % (self.epoch + 1))
 
         trace('finished.')
 
