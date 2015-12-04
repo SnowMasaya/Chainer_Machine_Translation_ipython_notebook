@@ -81,6 +81,15 @@ from chainer import optimizers
 ipython notebook
 ```
 #
+### Data Directory Structure 
+#
+```
+samples/　　　　　... Sample model and Translation result
+  - middle/ 　　　　　... middle setteing
+train/　     　... training data set
+test/ 　　　　　　　... test data set
+```
+#
 ### Licence
 #
 ```
