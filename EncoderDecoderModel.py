@@ -218,6 +218,7 @@ class EncoderDecoderModel:
                 for hyp in hyp_batch:
                     hyp.append('</s>')
                     hyp = hyp[:hyp.index('</s>')]
+                    # BLEUの結果を計算するため.
                     print(' '.join(hyp), file=fp)
 
                 generated += K

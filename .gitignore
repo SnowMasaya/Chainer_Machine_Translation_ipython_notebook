@@ -36,3 +36,8 @@ source_tmp.txt
 target_tmp.txt
 build
 machine_translation.ipynb.bk
+*.021
+EncoderDecoderModel_execute.py
+core_nlp_parse.pyx
+core_execute.py
+user.properties
