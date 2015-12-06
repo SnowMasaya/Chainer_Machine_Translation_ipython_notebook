@@ -41,3 +41,4 @@ EncoderDecoderModel_execute.py
 core_nlp_parse.pyx
 core_execute.py
 user.properties
+ChainerMachineTranslation*

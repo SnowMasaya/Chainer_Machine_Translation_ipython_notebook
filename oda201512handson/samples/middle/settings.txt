@@ -1,7 +1,0 @@
-data:
-  train20000.{ja,en}
-  test100.{ja,en}
-
-settings:
-  --vocab 4000
-  --embed 1
