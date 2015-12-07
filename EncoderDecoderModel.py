@@ -21,17 +21,20 @@ from util.chainer_cpu_wrapper import wrapper
 class EncoderDecoderModel:
 
     def __init__(self, parameter_dict):
-        self.parameter_dict   = parameter_dict
-        self.source           = parameter_dict["source"]
-        self.target           = parameter_dict["target"]
-        self.vocab            = parameter_dict["vocab"]
-        self.embed            = parameter_dict["embed"]
-        self.hidden           = parameter_dict["hidden"] 
-        self.epoch            = parameter_dict["epoch"] 
-        self.minibatch        = parameter_dict["minibatch"] 
-        self.generation_limit = parameter_dict["generation_limit"] 
+        self.parameter_dict       = parameter_dict
+        self.source               = parameter_dict["source"]
+        self.target               = parameter_dict["target"]
+        self.test_source          = parameter_dict["test_source"]
+        self.test_target          = parameter_dict["test_target"]
+        self.reference_target     = parameter_dict["reference_target"]
+        self.vocab                = parameter_dict["vocab"]
+        self.embed                = parameter_dict["embed"]
+        self.hidden               = parameter_dict["hidden"]
+        self.epoch                = parameter_dict["epoch"]
+        self.minibatch            = parameter_dict["minibatch"]
+        self.generation_limit     = parameter_dict["generation_limit"]
         self.show_hands_on_number = parameter_dict["show_hands_on_number"] 
-        self.show_i_epoch     = parameter_dict["show_i_epoch"] 
+        self.show_i_epoch         = parameter_dict["show_i_epoch"]
 
     def make_model(self):
         self.model = wrapper.make_model(
@@ -72,14 +75,12 @@ class EncoderDecoderModel:
             fp.write_linear(self.model.w_qq)
             wrapper.end_model_access(self.model)
 
-    @staticmethod
-    def load(filename):
-        self = EncoderDecoderModel()
+    def load(self, filename):
         with ModelFile(filename) as fp:
-            self.__src_vocab = Vocabulary.load(fp.get_file_pointer())
-            self.__trg_vocab = Vocabulary.load(fp.get_file_pointer())
-            self.__n_embed = int(fp.read())
-            self.__n_hidden = int(fp.read())
+            self.src_vocab = Vocabulary.load(fp.get_file_pointer())
+            self.trg_vocab = Vocabulary.load(fp.get_file_pointer())
+            self.n_embed = int(fp.read())
+            self.n_hidden = int(fp.read())
             self.make_model()
             wrapper.begin_model_access(self.model)
             fp.read_embed(self.model.w_xi)
@@ -133,7 +134,7 @@ class EncoderDecoderModel:
                 K = len(src_batch)
                 hyp_batch = model.train(src_batch, trg_batch)
 
-                if self.show_i_epoch == 0 and trained == 0:
+                if trained == 0:
                     self.print_out(K, i_epoch, trained, src_batch, trg_batch, hyp_batch)
 
                 trained += K
@@ -143,15 +144,15 @@ class EncoderDecoderModel:
 
         trace('finished.')
 
-    def test_model(self):
+    def test_model(self, model_name):
         trace('loading model ...')
-        model = EncoderDecoderModel.load(model)
+        model = self.load(model_name)
     
         trace('generating translation ...')
         generated = 0
 
-        with open(self.target, 'w') as fp:
-            for src_batch in gens.batch(gens.word_list(self.source), self.minibatch):
+        with open(self.test_target, 'w') as fp:
+            for src_batch in gens.batch(gens.word_list(self.test_source), self.minibatch):
                 src_batch = fill_batch(src_batch)
                 K = len(src_batch)
 
@@ -162,6 +163,7 @@ class EncoderDecoderModel:
                     hyp.append('</s>')
                     hyp = hyp[:hyp.index('</s>')]
                     # BLEUの結果を計算するため.
+                    print(' '.join(hyp))
                     print(' '.join(hyp), file=fp)
 
                 generated += K
@@ -170,8 +172,8 @@ class EncoderDecoderModel:
 
     def print_out(self, K, i_epoch, trained, src_batch, trg_batch, hyp_batch):
 
-        for k in range(self.show_hands_on_number):
-            trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + k + 1))
-            trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[k]]))
-            trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[k]]))
-            trace('  hyp = ' + ' '.join([x if x != '</s>' else '*' for x in hyp_batch[k]]))
+        #for k in range(self.show_hands_on_number):
+            trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + 0 + 1))
+            trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[0]]))
+            trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[0]]))
+            trace('  hyp = ' + ' '.join([x if x != '</s>' else '*' for x in hyp_batch[0]]))
