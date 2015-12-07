@@ -14,6 +14,7 @@ from util.functions import trace, fill_batch
 from util.model_file import ModelFile
 from util.vocabulary import Vocabulary
 
+import random
 from util.chainer_cpu_wrapper import wrapper
 #from util.chainer_gpu_wrapper import wrapper
 
@@ -120,6 +121,7 @@ class EncoderDecoderModel:
         trace('making model ...')
         model = self.new(src_vocab, trg_vocab, self.embed, self.hidden, self.parameter_dict)
 
+        random_number = random.randint(0, self.minibatch)
         for i_epoch in range(self.epoch):
             trace('epoch %d/%d: ' % (i_epoch + 1, self.epoch))
             trained = 0
@@ -135,7 +137,7 @@ class EncoderDecoderModel:
                 hyp_batch = model.train(src_batch, trg_batch)
 
                 if trained == 0:
-                    self.print_out(K, i_epoch, trained, src_batch, trg_batch, hyp_batch)
+                    self.print_out(random_number, i_epoch, trained, src_batch, trg_batch, hyp_batch)
 
                 trained += K
 
@@ -159,12 +161,15 @@ class EncoderDecoderModel:
                 trace('sample %8d - %8d ...' % (generated + 1, generated + K))
                 hyp_batch = model.predict(src_batch, self.generation_limit)
 
+                source_cuont = 0
                 for hyp in hyp_batch:
                     hyp.append('</s>')
                     hyp = hyp[:hyp.index('</s>')]
                     # BLEUの結果を計算するため.
+                    print("".join(src_batch[source_cuont]).replace("</s>", ""))
                     print(' '.join(hyp))
                     print(' '.join(hyp), file=fp)
+                    source_cuont = source_cuont + 1
 
                 generated += K
 
@@ -173,7 +178,7 @@ class EncoderDecoderModel:
     def print_out(self, K, i_epoch, trained, src_batch, trg_batch, hyp_batch):
 
         #for k in range(self.show_hands_on_number):
-            trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + 0 + 1))
-            trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[0]]))
-            trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[0]]))
-            trace('  hyp = ' + ' '.join([x if x != '</s>' else '*' for x in hyp_batch[0]]))
+            trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + K + 1))
+            trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[K]]))
+            trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[K]]))
+            trace('  hyp = ' + ' '.join([x if x != '</s>' else '*' for x in hyp_batch[K]]))
