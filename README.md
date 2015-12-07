@@ -3,8 +3,6 @@ Chainer with Machine Translation Tech-Circle#11
 
 This tool is making the Neural Networks Language Model
 
->[Japanese Reference Pages]<br>
-
 
 ## Description
 This tool is making the Machine Translation Model
