@@ -121,5 +121,5 @@ THE SOFTWARE.
 #
 >[Chainer]http://chainer.org/<br>
 >[Chainer Machine Translation]https://github.com/odashi/chainer_examples<br>
->[Learning and Predict Data]http://www2.nict.go.jp/univ-com/multi_trans/member/mutiyama/manual/index-ja.html<br>
+>[Learning and Predict Data]http://www.edrdg.org/wiki/index.php/Tanaka_Corpus<br>
 
