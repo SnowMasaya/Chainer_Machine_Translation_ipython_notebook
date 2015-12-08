@@ -40,15 +40,15 @@ class EncoderDecoderModel:
     def make_model(self):
         self.model = wrapper.make_model(
             # encoder
-            w_xi = functions.EmbedID(len(self.src_vocab), self.n_embed),
-            w_ip = functions.Linear(self.n_embed, 4 * self.n_hidden),
-            w_pp = functions.Linear(self.n_hidden, 4 * self.n_hidden),
+            weight_xi = functions.EmbedID(len(self.src_vocab), self.n_embed),
+            weight_ip = functions.Linear(self.n_embed, 4 * self.n_hidden),
+            weight_pp = functions.Linear(self.n_hidden, 4 * self.n_hidden),
             # decoder
-            w_pq = functions.Linear(self.n_hidden, 4 * self.n_hidden),
-            w_qj = functions.Linear(self.n_hidden, self.n_embed),
-            w_jy = functions.Linear(self.n_embed, len(self.trg_vocab)),
-            w_yq = functions.EmbedID(len(self.trg_vocab), 4 * self.n_hidden),
-            w_qq = functions.Linear(self.n_hidden, 4 * self.n_hidden),
+            weight_pq = functions.Linear(self.n_hidden, 4 * self.n_hidden),
+            weight_qj = functions.Linear(self.n_hidden, self.n_embed),
+            weight_jy = functions.Linear(self.n_embed, len(self.trg_vocab)),
+            weight_yq = functions.EmbedID(len(self.trg_vocab), 4 * self.n_hidden),
+            weight_qq = functions.Linear(self.n_hidden, 4 * self.n_hidden),
         )
 
     def new(self, src_vocab, trg_vocab, n_embed, n_hidden, parameter_dict):
@@ -66,14 +66,14 @@ class EncoderDecoderModel:
             fp.write(self.n_embed)
             fp.write(self.n_hidden)
             wrapper.begin_model_access(self.model)
-            fp.write_embed(self.model.w_xi)
-            fp.write_linear(self.model.w_ip)
-            fp.write_linear(self.model.w_pp)
-            fp.write_linear(self.model.w_pq)
-            fp.write_linear(self.model.w_qj)
-            fp.write_linear(self.model.w_jy)
-            fp.write_embed(self.model.w_yq)
-            fp.write_linear(self.model.w_qq)
+            fp.write_embed(self.model.weight_xi)
+            fp.write_linear(self.model.weight_ip)
+            fp.write_linear(self.model.weight_pp)
+            fp.write_linear(self.model.weight_pq)
+            fp.write_linear(self.model.weight_qj)
+            fp.write_linear(self.model.weight_jy)
+            fp.write_embed(self.model.weight_yq)
+            fp.write_linear(self.model.weight_qq)
             wrapper.end_model_access(self.model)
 
     def load(self, filename):
@@ -84,14 +84,14 @@ class EncoderDecoderModel:
             self.n_hidden = int(fp.read())
             self.make_model()
             wrapper.begin_model_access(self.model)
-            fp.read_embed(self.model.w_xi)
-            fp.read_linear(self.model.w_ip)
-            fp.read_linear(self.model.w_pp)
-            fp.read_linear(self.model.w_pq)
-            fp.read_linear(self.model.w_qj)
-            fp.read_linear(self.model.w_jy)
-            fp.read_embed(self.model.w_yq)
-            fp.read_linear(self.model.w_qq)
+            fp.read_embed(self.model.weight_xi)
+            fp.read_linear(self.model.weight_ip)
+            fp.read_linear(self.model.weight_pp)
+            fp.read_linear(self.model.weight_pq)
+            fp.read_linear(self.model.weight_qj)
+            fp.read_linear(self.model.weight_jy)
+            fp.read_embed(self.model.weight_yq)
+            fp.read_linear(self.model.weight_qq)
             wrapper.end_model_access(self.model)
         return self
 
