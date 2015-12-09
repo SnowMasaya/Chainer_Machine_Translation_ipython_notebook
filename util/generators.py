@@ -19,12 +19,12 @@ def sorted_parallel(generator1, generator2, pooling, order=1):
             yield x
 
 def word_list(filename):
-    with open(filename) as fp:
+    with open(filename, encoding = "utf-8") as fp:
         for l in fp:
             yield l.split()
 
 def letter_list(filename):
-    with open(filename) as fp:
+    with open(filename, encoding = "utf-8") as fp:
         for l in fp:
             yield list(''.join(l.split()))
 
