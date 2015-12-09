@@ -34,8 +34,6 @@ class EncoderDecoderModel:
         self.epoch                = parameter_dict["epoch"]
         self.minibatch            = parameter_dict["minibatch"]
         self.generation_limit     = parameter_dict["generation_limit"]
-        self.show_hands_on_number = parameter_dict["show_hands_on_number"] 
-        self.show_i_epoch         = parameter_dict["show_i_epoch"]
 
     def make_model(self):
         self.model = wrapper.make_model(
@@ -177,7 +175,6 @@ class EncoderDecoderModel:
 
     def print_out(self, K, i_epoch, trained, src_batch, trg_batch, hyp_batch):
 
-        #for k in range(self.show_hands_on_number):
             trace('epoch %3d/%3d, sample %8d' % (i_epoch + 1, self.epoch, trained + K + 1))
             trace('  src = ' + ' '.join([x if x != '</s>' else '*' for x in src_batch[K]]))
             trace('  trg = ' + ' '.join([x if x != '</s>' else '*' for x in trg_batch[K]]))
